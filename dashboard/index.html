@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dashboard điều hành dự án CN8-2">
+  <title>CN8-2 | Project Control</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-block">
+        <div class="brand-mark">C8</div>
+        <div>
+          <strong>CN8-2</strong>
+          <span>Project Control</span>
+        </div>
+      </div>
+      <nav class="nav-list" aria-label="Điều hướng chính">
+        <button class="nav-item active" data-view="overview"><span class="nav-glyph">▦</span>Tổng quan</button>
+        <button class="nav-item" data-view="progress"><span class="nav-glyph">↗</span>Tiến độ</button>
+        <button class="nav-item" data-view="actions"><span class="nav-glyph">✓</span>Cam kết họp</button>
+        <button class="nav-item" data-view="monitoring"><span class="nav-glyph">⌁</span>Quan trắc</button>
+        <button class="nav-item" data-view="lookahead"><span class="nav-glyph">▤</span>Kế hoạch 3 tuần</button>
+      </nav>
+      <div class="sidebar-foot">
+        <span class="source-dot"></span>
+        <div>
+          <strong>Nguồn thử nghiệm</strong>
+          <span>G:\My Drive</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-button mobile-menu" id="menuButton" aria-label="Mở menu" title="Mở menu">☰</button>
+        <div>
+          <p class="eyebrow">KHU DÂN CƯ HỖN HỢP</p>
+          <h1 id="pageTitle">Tổng quan điều hành</h1>
+        </div>
+        <div class="topbar-actions">
+          <div class="sync-status">
+            <span class="sync-dot"></span>
+            <div>
+              <strong>Dữ liệu đến 26/06/2026</strong>
+              <span>Báo cáo hiện trường đến 25/06</span>
+            </div>
+          </div>
+          <button class="icon-button" id="refreshButton" aria-label="Làm mới dữ liệu" title="Làm mới dữ liệu">↻</button>
+          <button class="avatar-button" aria-label="Tài khoản PMH" title="Tài khoản PMH">PMH</button>
+        </div>
+      </header>
+
+      <section class="content" id="content"></section>
+    </main>
+  </div>
+
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <aside class="detail-drawer" id="detailDrawer" aria-hidden="true">
+    <div class="drawer-head">
+      <div>
+        <p class="eyebrow" id="drawerEyebrow">CHI TIẾT</p>
+        <h2 id="drawerTitle">Thông tin</h2>
+      </div>
+      <button class="icon-button" id="closeDrawer" aria-label="Đóng" title="Đóng">×</button>
+    </div>
+    <div class="drawer-body" id="drawerBody"></div>
+  </aside>
+
+  <div class="toast" id="toast">Đã cập nhật dữ liệu hiển thị</div>
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

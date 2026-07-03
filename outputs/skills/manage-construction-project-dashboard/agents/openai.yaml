@@ -1,0 +1,4 @@
+interface:
+  display_name: "Construction Project Dashboard"
+  short_description: "Build and maintain construction control dashboards"
+  default_prompt: "Use $manage-construction-project-dashboard to build a management dashboard for this construction project."

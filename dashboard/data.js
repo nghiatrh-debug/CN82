@@ -1,0 +1,188 @@
+window.CN8_DATA = {
+  meta: {
+    project: "CN8-2",
+    location: "Khu A - Đô thị mới Nam Thành phố, P. Tân Hưng, TP.HCM",
+    client: "Công ty TNHH Phát triển Phú Mỹ Hưng",
+    consultant: "DSPCONS Việt Nam",
+    contractor: "VICONS",
+    latestDaily: "02/07/2026",
+    latestMeeting: "02/07/2026",
+    latestMonitoring: "30/06/2026",
+    documentCount: 383
+  },
+  headline: {
+    plan: 5.96,
+    actual: 5.42,
+    delayDays: 20,
+    manpower: 66,
+    trucks: 3,
+    openActions: 8,
+    urgentActions: 6,
+    latestReportCompliance: 83
+  },
+  progressTrend: [
+    { label: "W08", plan: 1.2, actual: 1.15 },
+    { label: "W09", plan: 1.8, actual: 1.72 },
+    { label: "W10", plan: 2.5, actual: 2.38 },
+    { label: "W11", plan: 3.3, actual: 3.12 },
+    { label: "W12", plan: 4.2, actual: 3.94 },
+    { label: "W13", plan: 5.41, actual: 5.05 },
+    { label: "W14", plan: 5.68, actual: 5.20 },
+    { label: "W15", plan: 5.96, actual: 5.42 }
+  ],
+  zones: [
+    { zone: "Zone A", excavation: 70, shoring: 0, targetExcavation: 100, targetShoring: 100, status: "critical" },
+    { zone: "Zone B", excavation: 90, shoring: 55, targetExcavation: 100, targetShoring: 100, status: "critical" },
+    { zone: "Zone C", excavation: 100, shoring: 100, targetExcavation: 100, targetShoring: 100, status: "watch" }
+  ],
+  workforce: [
+    { label: "BCH Vicons", value: 15 },
+    { label: "Shoring", value: 2 },
+    { label: "Công nhân", value: 31 },
+    { label: "Đào đất", value: 10 },
+    { label: "Khác", value: 8 }
+  ],
+  actions: [
+    {
+      id: "A-01", discipline: "Tiến độ", title: "Tăng xe đào nếu đào đất chậm so với kế hoạch",
+      owner: "VICONS", due: "Chưa xác nhận", status: "due", source: "Biên bản giao ban 26/06",
+      note: "PMH yêu cầu tăng số lượng xe đào khi công tác đào đất chậm; WR-15 ghi nhận 3 xe tải chở đất."
+    },
+    {
+      id: "A-02", discipline: "Tiến độ", title: "Hoàn tất kích hệ giằng lớp 3 Zone B",
+      owner: "VICONS", due: "28/06/2026", status: "overdue", source: "Biên bản giao ban 26/06",
+      note: "Vicons báo cáo kế hoạch kích 2 line ngày 27/06 và 2 line còn lại ngày 28/06; WR-15 đến 02/07 mới ghi nhận shoring Zone B 55%."
+    },
+    {
+      id: "A-03", discipline: "Tiến độ", title: "Hoàn tất kích hệ giằng lớp 3 Zone C",
+      owner: "VICONS", due: "29/06/2026", status: "completed", source: "Biên bản giao ban 26/06 / WR-15",
+      note: "Vicons báo cáo kế hoạch kích toàn bộ ngày 29/06; WR-15 ghi nhận shoring Zone C đạt 100%."
+    },
+    {
+      id: "A-04", discipline: "MEP", title: "Vật tư tiếp địa về công trường",
+      owner: "CSCEC / VICONS", due: "03/07/2026", status: "due", source: "Biên bản giao ban 26/06",
+      note: "Vicons báo cáo hàng tiếp địa MEP về công trường ngày 03/07; cần xác nhận nhập kho và sẵn sàng lắp đặt."
+    },
+    {
+      id: "A-05", discipline: "Thiết bị", title: "Trình lại bản vẽ vị trí đậu Kato 50 tấn",
+      owner: "VICONS", due: "30/06/2026", status: "overdue", source: "Biên bản giao ban 26/06",
+      note: "Biên bản yêu cầu trình lại bản vẽ vị trí đậu Kato khi cẩu vào công trường ngày 30/06."
+    },
+    {
+      id: "A-06", discipline: "Báo cáo", title: "Bổ sung kế hoạch tuần sau vào báo cáo tuần",
+      owner: "VICONS", due: "02/07/2026", status: "completed", source: "Biên bản giao ban 26/06 / WR-15",
+      note: "WR-15 đã có cột tuần sau 03/07-09/07 theo yêu cầu của PMH."
+    },
+    {
+      id: "A-07", discipline: "Phối hợp", title: "Kiểm tra vị trí, cao độ đầu cọc với Phan Vũ",
+      owner: "VICONS / Phan Vũ / TVGS", due: "Chưa xác nhận", status: "due", source: "Biên bản phối hợp 02/07",
+      note: "Biên bản scan ghi sau khi Vicons đào xong móng, Phan Vũ phối hợp sắp xếp người kiểm tra và xác nhận vị trí, cao độ đầu cọc."
+    },
+    {
+      id: "A-08", discipline: "Hồ sơ", title: "Bản vẽ thép dầm hầm B2 bị trả về trình lại",
+      owner: "VICONS", due: "Chưa xác nhận", status: "due", source: "WR-15",
+      note: "WR-15 ghi bản vẽ triển khai thi công thép dầm hầm B2 trình lần 1 bị trả về trình lại."
+    },
+    {
+      id: "A-09", discipline: "Hồ sơ", title: "Quy trình thi công và kích hệ giằng lớp 3 Khu B bị trả về",
+      owner: "VICONS", due: "Chưa xác nhận", status: "due", source: "WR-15",
+      note: "WR-15 ghi CN8-2/VC/Civil/MOS/25 trình lần 1 trả về trình lại; đây là ràng buộc trực tiếp cho Zone B."
+    },
+    {
+      id: "A-10", discipline: "Quan trắc", title: "Xác nhận ngưỡng cảnh báo cho IN6 và IN4",
+      owner: "TVGS / Quan trắc", due: "Chưa xác nhận", status: "due", source: "INCLINOMETER - CK14",
+      note: "CK14 ghi IN6 khoảng 39,5 mm và IN4 khoảng 28,9 mm theo cột chuyển vị tuyệt đối; chưa có bảng ngưỡng phê duyệt trong dữ liệu đã đọc."
+    }
+  ],
+  monitoring: [
+    { point: "IN6", value: 39.5, cycle: "CK14", date: "30/06/2026", status: "highest", trend: [19, 24, 29, 37.5, 39.5] },
+    { point: "IN4", value: 28.9, cycle: "CK14", date: "30/06/2026", status: "review", trend: [13, 18, 21.3, 28.0, 28.9] },
+    { point: "IN2", value: 27.6, cycle: "CK14", date: "30/06/2026", status: "review", trend: [7, 13, 14.7, 19.0, 27.6] },
+    { point: "IN8", value: 27.6, cycle: "CK14", date: "30/06/2026", status: "review", trend: [9, 16, 17.0, 24.9, 27.6] },
+    { point: "IN5", value: 23.8, cycle: "CK14", date: "30/06/2026", status: "normal", trend: [14, 19, 22.9, 23.5, 23.8] },
+    { point: "IN3", value: 22.6, cycle: "CK12", date: "30/06/2026", status: "normal", trend: [8, 14, 19.6, 21.8, 22.6] },
+    { point: "IN7", value: 19.9, cycle: "CK14", date: "30/06/2026", status: "normal", trend: [8, 12, 15.9, 19.2, 19.9] },
+    { point: "IN1", value: 14.0, cycle: "CK14", date: "30/06/2026", status: "normal", trend: [4, 8, 9.9, 13.2, 14.0] }
+  ],
+  lookahead: {
+    source: {
+      name: "CN8-2-VC-Civil-DS-13rev03 - Overall Construction Schedule Rev01",
+      approval: "Đã duyệt SPM ngày 11/05/2026",
+      scheduleDate: "23/04/2026",
+      path: "G:\\My Drive\\06. Main construction\\01. Contract - Schedule\\CN8-2-VC-Civil-DS-13rev03-Tiến độ thi công rev01 (đã duyệt SPM).pdf"
+    },
+    weeks: [
+      {
+        id: "W1", label: "Tuần 1", range: "03/07 - 09/07", status: "recovery",
+        objective: "Đóng các mốc đào đáy móng đã đến hạn và mở mặt bằng RC/MEP theo baseline.",
+        tasks: [
+          { zone: "Zone C", task: "Bàn giao đáy móng và khởi động RC/MEP", start: "03/07", finish: "09/07", target: "WR-15 tuần sau yêu cầu đào đáy móng 100%, MEP 40%, RC 25%", risk: "milestone" },
+          { zone: "Zone B", task: "Hoàn tất đào đáy móng và khởi động RC/MEP", start: "03/07", finish: "09/07", target: "Baseline mốc đào 03/07, MEP/RC từ 04/07; WR-15 hiện đào đáy móng 40%", risk: "critical" },
+          { zone: "Zone A", task: "Hoàn tất shoring lớp 3 và đào đáy móng", start: "03/07", finish: "09/07", target: "Baseline mốc đào 06/07, MEP/RC từ 07/07; WR-15 hiện shoring 0%, đáy móng 0%", risk: "critical" },
+          { zone: "Chung", task: "Chốt hồ sơ, vật tư tiếp địa và nghiệm thu chuyển bước", start: "03/07", finish: "09/07", target: "Không để chờ MEP, coffa/thép, nghiệm thu khi chuyển sang móng", risk: "watch" }
+        ],
+        gates: ["Cao độ đáy đào từng zone được xác nhận", "MEP tiếp địa về công trường", "Hồ sơ BF2 không còn trạng thái trả về làm nghẽn thi công"]
+      },
+      {
+        id: "W2", label: "Tuần 2", range: "10/07 - 16/07", status: "production",
+        objective: "Ổn định dây chuyền RC pile caps - beams - slab và MEP âm móng tại các zone đã bàn giao.",
+        tasks: [
+          { zone: "Zone C", task: "RC pile caps - beams - slab và MEP", start: "03/07", finish: "31/07", target: "Duy trì MEP đến 20/07 và RC đến 31/07 theo baseline", risk: "normal" },
+          { zone: "Zone B", task: "RC pile caps - beams - slab và MEP", start: "04/07", finish: "28/07", target: "Bám đường găng đổ bê tông Zone B ngày 28/07", risk: "high" },
+          { zone: "Zone A", task: "RC pile caps - beams - slab và MEP", start: "07/07", finish: "04/08", target: "Chỉ khởi động sau khi shoring và đáy móng được nghiệm thu", risk: "critical" },
+          { zone: "Chung", task: "Theo dõi sản lượng, nghiệm thu và vật tư theo ngày", start: "10/07", finish: "16/07", target: "Cập nhật bằng chứng hoàn thành từng khu vực thay vì chỉ phần trăm tổng hợp", risk: "watch" }
+        ],
+        gates: ["Nghiệm thu MEP trước bê tông", "Hồ sơ thép dầm BF2 được xử lý", "Kế hoạch vật tư MEP không chậm đường găng"]
+      },
+      {
+        id: "W3", label: "Tuần 3", range: "17/07 - 23/07", status: "production",
+        objective: "Khóa các mốc MEP trong cửa sổ lookahead và bảo vệ mốc đổ bê tông cuối tháng.",
+        tasks: [
+          { zone: "Zone C", task: "Hoàn tất MEP móng trong phạm vi baseline", start: "17/07", finish: "20/07", target: "Đóng MEP Zone C ngày 20/07 để bảo vệ RC đến 31/07", risk: "milestone" },
+          { zone: "Zone A", task: "Hoàn tất MEP móng trong cửa sổ lookahead", start: "17/07", finish: "23/07", target: "Đóng MEP Zone A ngày 23/07 nếu đã khởi động đúng 07/07", risk: "high" },
+          { zone: "Zone B", task: "Duy trì RC/MEP và chuẩn bị mốc đổ bê tông 28/07", start: "17/07", finish: "23/07", target: "MEP Zone B còn đến 24/07, RC đến 28/07", risk: "high" },
+          { zone: "Chung", task: "Xác nhận vị trí, cao độ đầu cọc với Phan Vũ trước nghiệm thu", start: "17/07", finish: "23/07", target: "Không để phát sinh tranh chấp vị trí/cao độ khi bàn giao móng", risk: "watch" }
+        ],
+        gates: ["Mốc MEP Zone C 20/07 được xác nhận", "Mốc MEP Zone A 23/07 được xác nhận", "Biên bản phối hợp Phan Vũ có bằng chứng đóng việc"]
+      }
+    ],
+    milestones: [
+      { date: "03/07", zone: "Zone C", name: "Khởi động RC móng và MEP" },
+      { date: "04/07", zone: "Zone B", name: "Khởi động RC móng và MEP" },
+      { date: "06/07", zone: "Zone A", name: "Hoàn tất đào đến đáy móng" },
+      { date: "07/07", zone: "Zone A", name: "Khởi động RC móng và MEP" },
+      { date: "20/07", zone: "Zone C", name: "Hoàn tất MEP móng theo baseline" },
+      { date: "23/07", zone: "Zone A", name: "Hoàn tất MEP móng theo baseline" }
+    ]
+  },
+  documents: [
+    {
+      type: "Báo cáo tuần", name: "20260702-CN8-2-VC-WR-15-Weekly report and Tracking MSP (TVGS đã checked).pdf", date: "02/07/2026",
+      owner: "VICONS", status: "Đã trích xuất", path: "G:\\My Drive\\06. Main construction\\05. Report\\1. XÂY DỰNG\\02. Báo cáo tuần\\20260702-CN8-2-VC-WR-15-Weekly report and Tracking MSP (TVGS đã checked).pdf"
+    },
+    {
+      type: "Báo cáo ngày", name: "20260702-CN8-2-Daily report.pdf", date: "02/07/2026",
+      owner: "VICONS", status: "PDF scan - chưa trích text", path: "G:\\My Drive\\06. Main construction\\05. Report\\1. XÂY DỰNG\\01. Báo cáo ngày\\20260702-CN8-2-Daily report.pdf"
+    },
+    {
+      type: "Báo cáo tháng", name: "260630-CN8-2-Báo cáo tháng 6-2026-Vicons.pdf", date: "30/06/2026",
+      owner: "VICONS", status: "Đã trích xuất", path: "G:\\My Drive\\06. Main construction\\05. Report\\1. XÂY DỰNG\\03. Báo cáo tháng\\260630-CN8-2-Báo cáo tháng 6-2026-Vicons.pdf"
+    },
+    {
+      type: "Biên bản họp", name: "260626 CN8-2 BBH giao ban.pdf", date: "26/06/2026",
+      owner: "DSPCONS", status: "Đã trích xuất", path: "G:\\My Drive\\06. Main construction\\10. Meeting minutes\\Họp giao ban\\260626 CN8-2 BBH giao ban.pdf"
+    },
+    {
+      type: "Biên bản họp", name: "260702-CN8-2-BBBH phối hợp Vicons và Phan Vũ.pdf", date: "02/07/2026",
+      owner: "DSPCONS", status: "Scan - đã đọc trực quan", path: "G:\\My Drive\\06. Main construction\\10. Meeting minutes\\Họp khác\\260702-CN8-2-BBBH phối hợp Vicons và Phan Vũ.pdf"
+    },
+    {
+      type: "Quan trắc", name: "INCLINOMETER - CK14.pdf", date: "30/06/2026",
+      owner: "Quan trắc", status: "Cần xác nhận ngưỡng", path: "G:\\My Drive\\06. Main construction\\16. Quan trắc\\KẾT QUẢ QUAN TRẮC\\KẾT QUẢ QUAN TRẮC INCLINOMETER\\BÁO CÁO NHANH ICLINOMETER\\INCLINOMETER - CK14.pdf"
+    },
+    {
+      type: "Chi phí", name: "Payment/Cost source folders", date: "03/07/2026",
+      owner: "Chưa xác nhận", status: "Chưa thấy thư mục 14. Cost / 15. Payment", path: "G:\\My Drive\\06. Main construction"
+    }
+  ]
+};

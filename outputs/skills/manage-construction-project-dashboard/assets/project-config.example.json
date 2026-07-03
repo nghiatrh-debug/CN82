@@ -1,0 +1,22 @@
+{
+  "project_code": "PROJECT-01",
+  "project_name": "Mixed-use construction project",
+  "source_root": "G:\\My Drive\\PROJECT-01",
+  "timezone": "Asia/Ho_Chi_Minh",
+  "client": "Owner",
+  "consultant": "Supervision consultant",
+  "contractor": "Main contractor",
+  "dashboard_output": "dashboard",
+  "report_cutoff": "2026-01-01",
+  "approved_schedule_patterns": [
+    "approved",
+    "đã duyệt",
+    "baseline",
+    "contract schedule"
+  ],
+  "update_schedule": {
+    "days": ["TU", "FR"],
+    "hour": 8,
+    "minute": 0
+  }
+}
