@@ -1,65 +1,65 @@
-# AI Báo Cáo PDF – Hướng dẫn cài đặt (v2.0)
+# AI Báo Cáo PDF – v3.0
 
-Google Sheet tự đọc các báo cáo PDF trong một thư mục Drive, lọc ra các **chỉ số do bạn tự khai báo** (áp dụng cho mọi loại báo cáo) và bóc tách hạng mục/vấn đề. Hệ thống thử lần lượt 5 API AI theo thứ tự ưu tiên và tự quét mỗi tuần.
+Google Sheet tự đọc các báo cáo PDF trong một thư mục Drive bằng AI, ghi số liệu vào các tab kết quả và dựng tab **Tóm tắt báo cáo** cho báo cáo mới nhất. Bản 3.0 hợp nhất:
 
-## 1. Cài đặt (khoảng 5 phút)
+- **Engine v6 "AI Tự Động"** (đã chạy thật trên CN8-2): mỗi nhóm thông tin = 1 prompt hẹp + 1 schema; vòng xoay nhà cung cấp có model dự phòng; kiểm chéo số liệu; cache theo file + nhóm; đọc kỳ báo cáo từ tên file; đọc PDF bằng chữ (Drive OCR).
+- **Bảng điều khiển v2.0**: sidebar có nút cho mọi thao tác; nhóm "Chỉ số tự khai báo" cho báo cáo bất kỳ; lịch tự động chọn thứ/giờ.
 
-1. Tạo một Google Sheet mới, chọn **Extensions → Apps Script**.
-2. Dán toàn bộ `Code.gs` vào file `Code.gs`.
-3. Bấm **+ → HTML**, đặt tên đúng là `Sidebar`, rồi dán nội dung `Sidebar.html`.
-4. Vào **Project Settings** (bánh răng): đặt Time zone là `(GMT+07:00) Ho Chi Minh`. Nếu muốn, bật "Show appsscript.json" rồi dán file `appsscript.json`.
-5. Lưu lại, quay về Sheet và tải lại trang (F5). Trên thanh menu sẽ xuất hiện **🚀 AI Báo Cáo**.
-6. Chọn **🚀 AI Báo Cáo → 🎛️ Mở bảng điều khiển**. Lần đầu Google sẽ hỏi cấp quyền (Drive, Sheets, Docs, gọi API ngoài, trigger, gửi mail). Bấm **Allow**.
+## 1. Cài đặt (5 phút, Sheet mới)
 
-> Muốn có nút bấm ngay trên sheet: **Insert → Drawing**, vẽ một nút, bấm ⋮ trên hình → **Assign script** → nhập `moBangDieuKhien` (hoặc `quetNgay` để quét luôn).
+1. Tạo Google Sheet mới → **Extensions → Apps Script**.
+2. Dán `Code.gs` vào file `Code.gs`.
+3. **+ → HTML**, đặt tên đúng `Sidebar`, dán `Sidebar.html`.
+4. **Project Settings** (⚙️) → tick *Show "appsscript.json" manifest file* → mở `appsscript.json`, dán nội dung file kèm theo (có đủ scope Drive/Docs để bóc chữ PDF).
+5. Lưu, quay về Sheet, tải lại trang. Menu **🚀 AI Báo Cáo → 🎛️ Mở bảng điều khiển**. Lần đầu Google hỏi cấp quyền → Allow.
 
-## 2. Bảng điều khiển (sidebar)
+> Muốn có nút trên sheet: **Insert → Drawing** vẽ nút → ⋮ → **Assign script** → `moBangDieuKhien`.
 
-| Tab | Nút / chức năng |
+## 2. Bảng điều khiển
+
+| Tab | Chức năng |
 |---|---|
-| ▶️ Quét | Checklist trạng thái · **BẮT ĐẦU QUÉT PDF** · mở sheet Chỉ số / Kết quả / So sánh · bật/tắt bóc tách hạng mục · email nhận tóm tắt |
-| 🔑 API | Nhập/xóa key cho từng API · ▲▼ sắp **thứ tự ưu tiên** · bật/tắt từng API · đổi model · **Kiểm tra kết nối** |
-| 📁 Thư mục | Dán link thư mục → **Xác nhận** (hiện tên thư mục, tổng PDF, số file chờ đọc) · tùy chọn quét thư mục con · đặt lại danh sách đã xử lý |
-| ⏰ Lịch | Bật quét **hằng tuần**, chọn thứ + giờ (mặc định Thứ Sáu 05:00, giờ VN) |
-| 📝 Nhật ký | 40 lần gọi API gần nhất: API nào, thành công/lỗi/bỏ qua, mất bao nhiêu giây, lý do |
+| ▶️ **Quét** | Checklist sẵn sàng · **BẮT ĐẦU QUÉT PDF MỚI** · mở các tab kết quả · dựng lại tab từ cache (không gọi API) |
+| 🔑 **API** | Kéo ▲▼ thứ tự ưu tiên · bật/tắt từng nhà cung cấp · **model chính + model dự phòng** · nhập/xóa key · **danh sách model dùng được với key** (bấm tên để điền) · **Kiểm tra kết nối** (ping cả 2 model, báo rõ HẠN MỨC / KEY SAI / SAI TÊN MODEL / QUÁ TẢI) |
+| 📁 **Thư mục** | Dán link → **Xác nhận** (hiện tên, số PDF, số file chờ đọc kèm kỳ báo cáo) · số ngày lùi · thư mục con · **Thử bóc chữ** file mới nhất · xóa cache |
+| 🧩 **Dữ liệu** | Tick bật/tắt 7 nhóm thông tin · sửa danh sách chỉ số · cách đọc PDF · email thông báo |
+| ⏰ **Lịch** | Bật quét hằng tuần, chọn thứ + giờ (mặc định **Thứ Sáu 05:00** giờ VN) |
+| 📝 **Nhật ký** | 50 lượt gọi API gần nhất với kết luận từng lượt |
 
-## 3. Khai báo chỉ số cần lọc
+## 3. Bảy nhóm thông tin
 
-Sheet **"Chỉ số cần lọc"** đã có sẵn 14 chỉ số mẫu. Bạn được sửa, xóa hoặc thêm dòng tùy ý:
+| Nhóm | Dành cho | Mặc định |
+|---|---|---|
+| Tiến độ tổng (% KH / % thực tế / trễ-sớm) | CN8-2 VICONS | Bật – bắt buộc cho tab Tổng hợp tuần |
+| Công tác A.1/A.2 + KH tuần sau | CN8-2 VICONS | Bật |
+| Nhân lực (mục F) | CN8-2 VICONS | Tắt |
+| 5 mốc MS Project | CN8-2 VICONS | Tắt |
+| Công tác chậm + hồ sơ Rev 3+ | CN8-2 VICONS | Tắt |
+| **Chỉ số tự khai báo** | Báo cáo bất kỳ | Bật |
+| Hạng mục & vấn đề | Báo cáo bất kỳ | Tắt |
 
-| Cột | Ý nghĩa |
-|---|---|
-| Tên chỉ số | Tên hiển thị trong kết quả |
-| Mô tả / gợi ý | Mô tả càng rõ, AI tìm càng chính xác. Có thể ghi cả tên tiếng Anh/viết tắt hay gặp, ví dụ "Manpower, nhân lực, số công nhân" |
-| Đơn vị mong muốn | Ví dụ %, ngày, m3, VNĐ |
-| Áp dụng | Bỏ tick để tạm không lọc chỉ số đó |
+Mỗi nhóm bật = 1 lần gọi API cho mỗi file. Bật thêm nhóm sau, script chỉ gọi cho nhóm còn thiếu.
 
-Mỗi chỉ số nhận một trong ba trạng thái:
-- **✅ Tìm thấy**: kèm giá trị, đơn vị, trích dẫn nguyên văn và số trang.
-- **⚠️ Cần kiểm tra**: báo cáo có thông tin nhưng không rõ ràng, mâu thuẫn hoặc phải tự tính.
-- **❌ Không tìm thấy**: giá trị ghi "Không có".
+### Chỉ số tự khai báo
+Sheet **"Chỉ số cần lọc"** có sẵn 13 chỉ số mẫu; sửa/xóa/thêm tùy ý. Cột *Mô tả* càng rõ (ghi cả tên tiếng Anh, viết tắt) AI tìm càng đúng. Mỗi chỉ số nhận một trong ba trạng thái: **✅ Tìm thấy** (kèm trích dẫn, trang) · **⚠️ Cần kiểm tra** · **❌ Không tìm thấy** (giá trị ghi "Không có"). Tab **Bảng so sánh chỉ số**: 1 dòng = 1 báo cáo, 1 cột = 1 chỉ số.
 
-## 4. Các sheet kết quả
+## 4. Các tab
 
-- **Kết quả chỉ số**: mỗi dòng = 1 chỉ số của 1 báo cáo (dạng dài, dễ lọc/pivot).
-- **Bảng so sánh**: mỗi dòng = 1 báo cáo, mỗi cột = 1 chỉ số, để so sánh các tuần.
-- **Hạng mục - Vấn đề**: danh sách hạng mục/vấn đề, gồm 5 trường như bản cũ.
-- **Nhật ký API**: toàn bộ lịch sử gọi API.
-- `_DaXuLy` (ẩn): danh sách file đã đọc, dùng để chống trùng.
+`Tóm tắt báo cáo` (báo cáo mới nhất: nhận xét nhanh, tiến độ tổng, công tác đạt/chưa đạt, chỉ số, hạng mục) · `Tổng hợp tuần` · `Công tác chính` · `Mốc tiến độ MSP` · `Chậm trễ & hồ sơ` · `Kết quả chỉ số` · `Bảng so sánh chỉ số` · `Hạng mục - Vấn đề` · `Nhật ký API` · `_Cache` (ẩn, JSON thô – không sửa tay).
 
-## 5. Cách hệ thống chống trùng và xoay vòng
+## 5. Cách hệ thống hoạt động
 
-- Mỗi lần chạy đọc **tất cả PDF chưa xử lý**, theo thứ tự cũ trước mới sau.
-- Chống trùng theo **File ID + ngày cập nhật**. File được thay bằng bản mới (cùng tên) sẽ được đọc lại; đổi tên file không làm đọc lại.
-- File lỗi sẽ được thử lại ở các lần chạy sau, tối đa 3 lần.
-- Apps Script giới hạn 6 phút mỗi lần chạy. Nếu còn file chưa đọc, hệ thống tự chạy tiếp sau 2 phút.
-- Xoay vòng API: API thiếu key thì **bỏ qua**. API lỗi hoặc không tìm thấy chỉ số nào thì **chuyển sang API kế tiếp**. Nếu mọi API đều không tìm thấy, kết quả được ghi "Không tìm thấy" (vì báo cáo thật sự không có các chỉ số đó).
-- Claude và Gemini đọc **nguyên file PDF**, kể cả bảng, hình và bản scan. OpenRouter, Groq và Cloudflare chỉ đọc **văn bản** do Drive trích từ PDF, có giới hạn độ dài: khi văn bản bị cắt, cột "AI đã dùng" ghi rõ "chỉ đọc X% văn bản".
+- **Vòng xoay**: nhóm nào cũng thử nhà cung cấp số 1. Hỏng vì 429 (hết hạn mức), 401/403 (key), 404 (model), 5xx (quá tải) hoặc quá 70 giây → thử model dự phòng → vẫn hỏng thì nhảy sang số 2… Nhà cung cấp hỏng bị loại khỏi phần còn lại của lượt chạy. Model không nhận `json_schema` được tự hạ xuống `json_object` và ghi nhớ.
+- **Đọc PDF**: bóc chữ bằng Drive OCR (nhẹ, rẻ). Không đủ chữ (PDF scan) → gửi nguyên file cho **Claude** hoặc **Gemini** (các bên khác chỉ nhận chữ). Có thể ép "chỉ chữ" hoặc "chỉ PDF" ở tab Dữ liệu.
+- **Cache & chống trùng**: khóa = File ID + thời điểm sửa. File bị thay bản mới → đọc lại. Các tab kết quả luôn được dựng lại từ cache, không ghi trùng. Mỗi File ID chỉ hiện phiên bản mới nhất.
+- **Giới hạn Apps Script**: mỗi lượt đọc tối đa 3 file, dừng nhận file mới sau 150 giây; còn file thì tự chạy tiếp sau 1 phút; model quá tải thì tự thử lại sau 5 phút (tối đa 4 lần).
+- **Kỳ báo cáo** đọc từ tên file: `WR-33`, `Week 33`, `Tuần 33`, `MR-10`, `2026-11-05`, `05-11-2026`, `05/11/2026`.
+- **Kiểm chéo**: % ngoài 0–100 bị từ chối; thực tế > kế hoạch mà "Trễ" dương → từ chối; cộng 12 chức danh lệch Tổng > 2 người → từ chối. Bị từ chối thì thử model/nhà cung cấp kế tiếp.
 
-## 6. Lưu ý
+## 6. Bảo mật & lưu ý
 
-- **API key** được lưu trong User Properties của tài khoản Google đang nhập. Người khác dù có quyền sửa Sheet cũng không thấy key.
-- **Lịch tự động** chạy bằng tài khoản của người bật lịch, nên người bật lịch phải là người đã nhập key.
-- **Bảo mật dữ liệu**: báo cáo sẽ được gửi tới các nhà cung cấp AI đang bật. Với tài liệu nhạy cảm (chi phí, công nợ, tranh chấp), chỉ nên bật API có cam kết không dùng dữ liệu để huấn luyện, và tắt các API còn lại ở tab API.
-- **Model mặc định** (sửa được ở tab API): Claude `claude-sonnet-5-5`, Gemini `gemini-2.5-flash`, OpenRouter `google/gemini-2.5-flash`, Groq `llama-3.3-70b-versatile`, Cloudflare `@cf/meta/llama-3.3-70b-instruct-fp8-fast`. Nếu nhà cung cấp ngừng hỗ trợ model nào, nút "Kiểm tra kết nối" sẽ báo lỗi; khi đó đổi sang model mới.
-- PDF lớn hơn 20 MB không gửi trực tiếp cho Claude/Gemini mà chỉ dùng các API đọc text.
+- API key lưu trong **User Properties** của tài khoản đang đăng nhập: không nằm trong code, không hiện lại trong giao diện, không ghi vào nhật ký (nhật ký chỉ ghi 300 ký tự đầu của lỗi API).
+- **Lịch tự động chạy bằng tài khoản của người bật lịch**, nên người đó phải là người đã nhập key.
+- Báo cáo được gửi tới các nhà cung cấp đang bật. Tài liệu nhạy cảm (công nợ, tranh chấp) → chỉ bật nhà cung cấp có cam kết không dùng dữ liệu để huấn luyện.
+- **Tên model mặc định** chưa được kiểm chứng với key của anh: Claude `claude-sonnet-5-5` / `claude-haiku-5-5`; OpenRouter `openrouter/auto` / `openai/gpt-oss-120b`; Cloudflare `@cf/meta/llama-3.3-70b-instruct-fp8-fast`; Groq `openai/gpt-oss-120b` / `llama-3.3-70b-versatile`; Gemini `gemini-2.5-flash`. Dùng nút **"Model dùng được với key này"** và **"Kiểm tra kết nối"** ở tab API để chốt tên đúng trước lần quét đầu.
+- Tham chiếu: `reference/v6_cn82_weekly_report.gs` là bản v6 gốc, giữ để đối chiếu.
