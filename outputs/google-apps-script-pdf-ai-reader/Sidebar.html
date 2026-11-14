@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<style>
+  :root { --pri:#1f3b57; --acc:#1a73e8; --ok:#188038; --err:#c5221f; --warn:#b06000; --mut:#5f6368; --bd:#dadce0; --bg:#f8f9fa; }
+  * { box-sizing:border-box; }
+  body { font-family: Arial, sans-serif; font-size:13px; margin:0; color:#202124; background:#fff; }
+  header { background:var(--pri); color:#fff; padding:10px 12px; }
+  header b { font-size:14px; } header small { opacity:.75; }
+  nav { display:flex; flex-wrap:wrap; border-bottom:1px solid var(--bd); background:var(--bg); }
+  nav button { flex:1 1 auto; border:0; background:none; padding:8px 4px; font-size:12px; cursor:pointer; color:var(--mut); border-bottom:2px solid transparent; }
+  nav button.on { color:var(--acc); border-bottom-color:var(--acc); font-weight:bold; }
+  section { display:none; padding:12px; } section.on { display:block; }
+  h3 { font-size:13px; margin:14px 0 6px; color:var(--pri); } h3:first-child { margin-top:0; }
+  .card { border:1px solid var(--bd); border-radius:6px; padding:8px; margin-bottom:8px; background:#fff; }
+  .row { display:flex; gap:6px; align-items:center; }
+  .grow { flex:1; min-width:0; }
+  input[type=text], input[type=password], input[type=email], select { width:100%; padding:6px; border:1px solid var(--bd); border-radius:4px; font-size:12px; }
+  button.b { padding:7px 10px; border:1px solid var(--bd); border-radius:4px; background:#fff; cursor:pointer; font-size:12px; }
+  button.b:hover { background:var(--bg); }
+  button.p { background:var(--acc); color:#fff; border-color:var(--acc); }
+  button.p:hover { background:#1765cc; }
+  button.big { width:100%; padding:11px; font-size:14px; font-weight:bold; }
+  button.s { padding:3px 7px; font-size:11px; }
+  button:disabled { opacity:.5; cursor:default; }
+  .mut { color:var(--mut); font-size:11px; }
+  .ok { color:var(--ok); } .err { color:var(--err); } .warn { color:var(--warn); }
+  .pill { display:inline-block; padding:1px 6px; border-radius:10px; font-size:10px; background:var(--bg); border:1px solid var(--bd); }
+  .msg { margin-top:8px; padding:8px; border-radius:4px; background:var(--bg); white-space:pre-wrap; display:none; }
+  .msg.show { display:block; }
+  .prov { border:1px solid var(--bd); border-radius:6px; padding:6px 8px; margin-bottom:6px; }
+  .prov .head { display:flex; align-items:center; gap:6px; }
+  .prov .num { width:18px; height:18px; border-radius:50%; background:var(--pri); color:#fff; font-size:11px; display:flex; align-items:center; justify-content:center; }
+  .prov.off { opacity:.55; }
+  .log { font-size:11px; border-bottom:1px solid #eee; padding:5px 0; }
+  .log .t { color:var(--mut); }
+  ul.files { margin:4px 0 0; padding-left:16px; font-size:11px; max-height:140px; overflow:auto; }
+  label.chk { display:flex; gap:6px; align-items:center; margin:6px 0; }
+  .spin { display:inline-block; width:12px; height:12px; border:2px solid #ccc; border-top-color:var(--acc); border-radius:50%; animation:sp 1s linear infinite; vertical-align:middle; }
+  @keyframes sp { to { transform:rotate(360deg); } }
+</style>
+</head>
+<body>
+<header><b>🚀 AI Báo Cáo PDF</b><br><small id="ver">Đang tải...</small></header>
+<nav>
+  <button data-tab="scan" class="on">▶️ Quét</button>
+  <button data-tab="api">🔑 API</button>
+  <button data-tab="folder">📁 Thư mục</button>
+  <button data-tab="sched">⏰ Lịch</button>
+  <button data-tab="log">📝 Nhật ký</button>
+</nav>
+
+<!-- ===== QUÉT ===== -->
+<section id="scan" class="on">
+  <div class="card" id="checklist"></div>
+  <button class="b p big" id="btnScan">▶️ BẮT ĐẦU QUÉT PDF</button>
+  <div class="msg" id="scanMsg"></div>
+
+  <h3>Chỉ số cần lọc</h3>
+  <div class="mut">Khai báo bất kỳ chỉ số nào bạn cần trong sheet <b>"Chỉ số cần lọc"</b> (tên + mô tả gợi ý). AI sẽ tìm trong mọi loại báo cáo; chỉ số không có sẽ ghi <b>❌ Không tìm thấy</b>.</div>
+  <div class="row" style="margin-top:6px">
+    <button class="b" data-open="Chỉ số cần lọc">📋 Sửa chỉ số</button>
+    <button class="b" data-open="Kết quả chỉ số">📈 Kết quả</button>
+    <button class="b" data-open="Bảng so sánh">📊 So sánh</button>
+  </div>
+
+  <h3>Tùy chọn</h3>
+  <label class="chk"><input type="checkbox" id="optItems"> Bóc tách thêm danh sách hạng mục / vấn đề</label>
+  <div class="mut">Email nhận tóm tắt sau mỗi lần quét (để trống = không gửi):</div>
+  <div class="row" style="margin-top:4px">
+    <input type="email" id="optEmail" class="grow" placeholder="email@congty.com">
+    <button class="b" id="btnSaveOpt">Lưu</button>
+  </div>
+</section>
+
+<!-- ===== API ===== -->
+<section id="api">
+  <div class="mut" style="margin-bottom:8px">Kéo thứ tự bằng ▲▼. Hệ thống thử API số 1 trước; lỗi hoặc không có dữ liệu thì chuyển sang API kế tiếp. Key được lưu riêng cho tài khoản Google của bạn (User Properties), không nằm trong code.</div>
+  <div id="provList"></div>
+  <button class="b p" id="btnSaveProv" style="width:100%">💾 Lưu thứ tự ưu tiên & model</button>
+  <div class="msg" id="apiMsg"></div>
+</section>
+
+<!-- ===== THƯ MỤC ===== -->
+<section id="folder">
+  <h3>Thư mục Google Drive chứa báo cáo PDF</h3>
+  <div class="mut">Dán link thư mục hoặc ID:</div>
+  <input type="text" id="folderInput" placeholder="https://drive.google.com/drive/folders/..." style="margin-top:4px">
+  <label class="chk"><input type="checkbox" id="folderSub"> Quét cả thư mục con</label>
+  <button class="b p" id="btnFolder" style="width:100%">✅ Xác nhận thư mục</button>
+  <div class="msg" id="folderMsg"></div>
+  <h3>Đặt lại</h3>
+  <div class="mut">Xóa đánh dấu "đã đọc" để quét lại toàn bộ file trong thư mục (dữ liệu kết quả cũ vẫn giữ).</div>
+  <button class="b" id="btnReset" style="margin-top:6px">♻️ Đặt lại danh sách đã xử lý</button>
+</section>
+
+<!-- ===== LỊCH ===== -->
+<section id="sched">
+  <h3>Tự động đọc báo cáo mỗi tuần</h3>
+  <label class="chk"><input type="checkbox" id="schOn"> Bật quét tự động hằng tuần</label>
+  <div class="row">
+    <div class="grow"><div class="mut">Thứ</div>
+      <select id="schDay">
+        <option value="MONDAY">Thứ Hai</option><option value="TUESDAY">Thứ Ba</option><option value="WEDNESDAY">Thứ Tư</option>
+        <option value="THURSDAY">Thứ Năm</option><option value="FRIDAY">Thứ Sáu</option><option value="SATURDAY">Thứ Bảy</option><option value="SUNDAY">Chủ Nhật</option>
+      </select></div>
+    <div style="width:90px"><div class="mut">Giờ</div><select id="schHour"></select></div>
+  </div>
+  <button class="b p" id="btnSched" style="width:100%;margin-top:8px">💾 Lưu lịch</button>
+  <div class="msg" id="schedMsg"></div>
+  <p class="mut">Giờ Việt Nam (Asia/Ho_Chi_Minh). Google chạy lịch trong khoảng ±15 phút quanh giờ đã chọn. Lịch chạy bằng tài khoản người bật lịch, nên người đó phải là người đã nhập API key.</p>
+</section>
+
+<!-- ===== NHẬT KÝ ===== -->
+<section id="log">
+  <div class="row" style="margin-bottom:8px">
+    <button class="b" id="btnLogReload">🔄 Tải lại</button>
+    <button class="b" data-open="Nhật ký API">📄 Mở sheet</button>
+    <button class="b" id="btnLogClear">🗑️ Xóa</button>
+  </div>
+  <div id="logList" class="mut">Đang tải...</div>
+</section>
+
+<script>
+const DAY_VN = {MONDAY:'Thứ Hai',TUESDAY:'Thứ Ba',WEDNESDAY:'Thứ Tư',THURSDAY:'Thứ Năm',FRIDAY:'Thứ Sáu',SATURDAY:'Thứ Bảy',SUNDAY:'Chủ Nhật'};
+let S = null;      // state từ server
+let order = [];    // providers đang chỉnh
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function call(fn, args, onOk, btn) {
+  if (btn) { btn.disabled = true; btn._t = btn.innerHTML; btn.innerHTML = '<span class="spin"></span> Đang xử lý...'; }
+  const done = () => { if (btn) { btn.disabled = false; btn.innerHTML = btn._t; } };
+  google.script.run
+    .withSuccessHandler(r => { done(); onOk && onOk(r); })
+    .withFailureHandler(e => { done(); alert('Lỗi: ' + (e && e.message ? e.message : e)); })[fn].apply(null, args || []);
+}
+function msg(id, html, cls) { const m = $(id); m.className = 'msg show ' + (cls || ''); m.innerHTML = html; }
+
+// ---- tabs ----
+document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x === b));
+  document.querySelectorAll('section').forEach(s => s.classList.toggle('on', s.id === b.dataset.tab));
+  if (b.dataset.tab === 'log') loadLog();
+});
+document.querySelectorAll('[data-open]').forEach(b => b.onclick = () => call('ui_openSheet', [b.dataset.open]));
+
+for (let h = 0; h < 24; h++) $('schHour').insertAdjacentHTML('beforeend', '<option value="' + h + '">' + (h < 10 ? '0' : '') + h + ':00</option>');
+
+// ---- load ----
+function load() { call('ui_getState', [], s => { S = s; order = s.providers.map(p => Object.assign({}, p)); render(); }); }
+
+function render() {
+  $('ver').textContent = 'v' + S.version + ' · ' + (S.me || '');
+  // checklist
+  const ready = order.filter(p => p.enabled && p.ready);
+  const items = [
+    [!!S.folder.id, 'Thư mục: ' + (S.folder.id ? esc(S.folder.name) : 'chưa xác nhận')],
+    [ready.length > 0, 'API sẵn sàng: ' + (ready.length ? ready.map(p => esc(p.label.split(' ')[0])).join(' → ') : 'chưa có key')],
+    [S.indicatorsCount > 0, 'Chỉ số áp dụng: ' + S.indicatorsCount],
+    [S.schedule.enabled && S.schedule.triggerActive, 'Lịch tự động: ' + (S.schedule.enabled ? DAY_VN[S.schedule.weekday] + ' ' + S.schedule.hour + ':00' + (S.schedule.triggerActive ? '' : ' (trigger chưa hoạt động!)') : 'đang tắt')]
+  ];
+  $('checklist').innerHTML = items.map(i => '<div>' + (i[0] ? '<span class="ok">✔</span> ' : '<span class="warn">○</span> ') + i[1] + '</div>').join('');
+  $('optItems').checked = S.options.extractItems;
+  $('optEmail').value = S.options.notifyEmail || '';
+  $('folderInput').value = S.folder.id || '';
+  $('folderSub').checked = S.folder.includeSubfolders;
+  $('schOn').checked = S.schedule.enabled;
+  $('schDay').value = S.schedule.weekday || 'FRIDAY';
+  $('schHour').value = String(S.schedule.hour == null ? 5 : S.schedule.hour);
+  renderProviders();
+}
+
+function renderProviders() {
+  $('provList').innerHTML = order.map((p, i) => `
+    <div class="prov ${p.enabled ? '' : 'off'}">
+      <div class="head">
+        <span class="num">${i + 1}</span>
+        <b class="grow">${esc(p.label)}</b>
+        <span class="pill">${p.input === 'pdf' ? 'đọc PDF' : 'đọc text'}</span>
+        <button class="b s" onclick="mv(${i},-1)" ${i === 0 ? 'disabled' : ''}>▲</button>
+        <button class="b s" onclick="mv(${i},1)" ${i === order.length - 1 ? 'disabled' : ''}>▼</button>
+      </div>
+      <label class="chk"><input type="checkbox" ${p.enabled ? 'checked' : ''} onchange="order[${i}].enabled=this.checked;renderProviders()"> Sử dụng
+        <span class="${p.ready ? 'ok' : 'warn'}" style="margin-left:auto;font-size:11px">${p.ready ? '● có key' : '○ thiếu key'}</span></label>
+      <div class="mut">Model</div>
+      <input type="text" value="${esc(p.model)}" placeholder="${esc(p.defaultModel)}" onchange="order[${i}].model=this.value">
+      ${p.keys.map(k => `
+        <div class="mut" style="margin-top:5px">${esc(k.label)} <span>(${esc(k.hint)})</span> ${k.masked ? '<span class="ok">' + esc(k.masked) + '</span>' : ''}</div>
+        <div class="row">
+          <input type="password" class="grow" id="k_${k.prop}" placeholder="${k.masked ? 'Nhập để thay key mới' : 'Dán key vào đây'}">
+          <button class="b s" onclick="saveKey('${k.prop}')">Lưu</button>
+          ${k.masked ? `<button class="b s" onclick="delKey('${k.prop}')">Xóa</button>` : ''}
+        </div>`).join('')}
+      <div class="row" style="margin-top:6px">
+        <button class="b s" onclick="testProv('${p.id}', this)" ${p.ready ? '' : 'disabled'}>🔌 Kiểm tra kết nối</button>
+        <span class="mut grow" id="t_${p.id}"></span>
+      </div>
+    </div>`).join('');
+}
+
+function mv(i, d) { const j = i + d; [order[i], order[j]] = [order[j], order[i]]; renderProviders(); }
+function saveKey(prop) {
+  const v = $('k_' + prop).value.trim();
+  if (!v) return alert('Chưa nhập key.');
+  call('ui_saveKey', [prop, v], () => { msg('apiMsg', '<span class="ok">✔ Đã lưu key.</span>'); load(); });
+}
+function delKey(prop) { if (confirm('Xóa key này?')) call('ui_deleteKey', [prop], load); }
+function testProv(id, btn) {
+  // lưu model đang nhập trước khi test
+  call('ui_saveProviders', [order.map(p => ({ id: p.id, enabled: p.enabled, model: p.model }))], () =>
+    call('ui_testProvider', [id], r => { $('t_' + id).innerHTML = '<span class="' + (r.ok ? 'ok' : 'err') + '">' + esc(r.msg) + '</span>'; }, btn));
+}
+$('btnSaveProv').onclick = function () {
+  call('ui_saveProviders', [order.map(p => ({ id: p.id, enabled: p.enabled, model: p.model }))],
+    () => { msg('apiMsg', '<span class="ok">✔ Đã lưu thứ tự: ' + order.filter(p => p.enabled).map(p => esc(p.label)).join(' → ') + '</span>'); load(); }, this);
+};
+
+// ---- scan ----
+$('btnScan').onclick = function () {
+  msg('scanMsg', '<span class="spin"></span> Đang đọc PDF... (mỗi file mất khoảng 20–90 giây)');
+  call('ui_runScan', [], r => {
+    let h = '<b class="' + (r.ok ? 'ok' : 'err') + '">' + esc(r.message) + '</b>';
+    if (r.details && r.details.length) h += '<br>' + r.details.map(d => (d.ok ? '✅ ' : '❌ ') + esc(d.name) +
+      (d.ok ? ' — ' + d.found + '/' + d.total + ' chỉ số · ' + esc(d.provider) : ' — ' + esc(d.error))).join('<br>');
+    msg('scanMsg', h);
+    load();
+  }, this);
+};
+$('btnSaveOpt').onclick = function () {
+  call('ui_saveOptions', [{ extractItems: $('optItems').checked, notifyEmail: $('optEmail').value }], () => msg('scanMsg', '<span class="ok">✔ Đã lưu tùy chọn.</span>'), this);
+};
+$('optItems').onchange = () => call('ui_saveOptions', [{ extractItems: $('optItems').checked, notifyEmail: $('optEmail').value }]);
+
+// ---- folder ----
+$('btnFolder').onclick = function () {
+  call('ui_setFolder', [$('folderInput').value, $('folderSub').checked], r => {
+    let h = '<span class="ok">✔ Đã xác nhận: <b>' + esc(r.name) + '</b></span><br>Tổng PDF: ' + r.total + ' · Chờ đọc: <b>' + r.pending + '</b>';
+    if (r.pendingNames.length) h += '<ul class="files">' + r.pendingNames.map(n => '<li>' + esc(n) + '</li>').join('') + (r.pending > r.pendingNames.length ? '<li>...</li>' : '') + '</ul>';
+    msg('folderMsg', h); load();
+  }, this);
+};
+$('btnReset').onclick = function () {
+  if (confirm('Đặt lại để quét lại toàn bộ PDF trong thư mục?')) call('ui_resetRegistry', [], () => msg('folderMsg', '<span class="ok">✔ Đã đặt lại. Bấm "Xác nhận thư mục" để xem số file chờ.</span>'), this);
+};
+
+// ---- schedule ----
+$('btnSched').onclick = function () {
+  call('ui_saveSchedule', [{ enabled: $('schOn').checked, weekday: $('schDay').value, hour: $('schHour').value }], s => {
+    msg('schedMsg', s.enabled ? '<span class="ok">✔ Đã bật: mỗi ' + DAY_VN[s.weekday] + ' lúc ' + s.hour + ':00.</span>' : 'Đã tắt quét tự động.');
+    load();
+  }, this);
+};
+
+// ---- log ----
+function loadLog() {
+  $('logList').innerHTML = '<span class="spin"></span>';
+  call('ui_getLog', [40], rows => {
+    if (!rows.length) { $('logList').innerHTML = 'Chưa có nhật ký.'; return; }
+    $('logList').innerHTML = rows.map(r => {
+      const cls = r[6] === 'THÀNH CÔNG' || r[6] === 'OK' ? 'ok' : (r[6].indexOf('LỖI') >= 0 ? 'err' : (r[6] === 'BỎ QUA' ? 'mut' : 'warn'));
+      return '<div class="log"><span class="t">' + esc(r[0]) + ' · ' + esc(r[2]) + '</span><br><b class="' + cls + '">' + esc(r[6]) + '</b> ' +
+        esc(r[4]) + (r[7] && r[7] !== '0' ? ' (' + esc(r[7]) + 's)' : '') + '<br>📄 ' + esc(r[3]) + '<br><span class="mut">' + esc(r[8]) + '</span></div>';
+    }).join('');
+  });
+}
+$('btnLogReload').onclick = loadLog;
+$('btnLogClear').onclick = function () { if (confirm('Xóa toàn bộ nhật ký API?')) call('ui_clearLog', [], loadLog, this); };
+
+load();
+</script>
+</body>
+</html>
